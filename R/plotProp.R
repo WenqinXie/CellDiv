@@ -13,6 +13,7 @@
 ##' @param color a vector containing a set of aesthetic values
 ##' @return a bar chart representing cell types proportion
 ##' @import ggplot2
+##' @importFrom reshape2 melt
 ##' @examples
 ##' set.seed(1)
 ##' cdata <- matrix(sample(100:300, 25, replace = TRUE), 5, 5)
@@ -106,7 +107,7 @@ plotProp <- function(cdata,
 ##' @title plot.bar
 ##' @param dat a dataframe containing three columns: xtitle(self-defined), CellType, Proportion
 ##' @param xtitle A custom column name, which is also the title name of the X-axis
-##' @et element_text
+##' @param et element_text
 ##' @param bar_width the width of the bar
 ##' @return a bar chart
 ##' @import ggplot2
@@ -134,7 +135,7 @@ plot.bar <- function(dat = dat, xtitle = xtitle,
 ##' @title plot.flow
 ##' @param dat a dataframe containing three columns: xtitle(self-defined), CellType, Proportion
 ##' @param xtitle A custom column name, which is also the title name of the X-axis
-##' @et element_text
+##' @param et element_text
 ##' @param bar_width the width of the bar
 ##' @return a bar chart
 ##' @import ggplot2

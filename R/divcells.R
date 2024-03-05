@@ -25,8 +25,6 @@ divcells <- function(cdata, metadata, slcells) {
 
 ##' Calculate diversity scores(without metadata)
 ##' @title celltdiv
-##' @param metadata A dataframe containing the 'sample' and 'condition' columns.
-##' The class of "condition" should be factor, and levels of "condition" should be "2".
 ##' @param cdata A dataframe with row names for sample names
 ##' and column names containing at least three cell type names.
 ##' @param cellsets A vector containing the names of

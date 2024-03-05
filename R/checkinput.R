@@ -23,7 +23,7 @@ checkinput <- function(metadata, cdata, cellsets) {
   }
 
   if(!inherits(cdata, "data.frame")){
-    stop("class of cdata should be data.frame or matrix")
+    stop("class of cdata should be data.frame")
   }
 
   if(!inherits(cellsets, "character")){

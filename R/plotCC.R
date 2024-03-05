@@ -6,7 +6,7 @@
 ##' @param xlabs xlabs
 ##' @param ylabs ylabs
 ##' @param color a vector containing a set of aesthetic values
-##' @inherit ggpubr stat_compare_means
+##' @inheritParams ggpubr::stat_compare_means
 ##' @return a plot of the difference of diversity scores
 ##' @import ggplot2
 ##' @import gghalves
@@ -35,7 +35,7 @@ plotCC <- function(data, x = "condition", y = "divscore",
                    method.args = list(), ref.group = NULL,
                    comparisons = NULL, hide.ns = FALSE,
                    label.x = 1.5,  label.y = 2,
-                   p.label = "p.format",
+                   label = "p.format",
                    color = NULL){
   p <- ggplot2::ggplot(data, ggplot2::aes_string(x = x, y = y, fill = x)) +
     gghalves::geom_half_violin(
@@ -54,7 +54,7 @@ plotCC <- function(data, x = "condition", y = "divscore",
                                ref.group = ref.group, comparisons = comparisons,
                                hide.ns = hide.ns, label.x = label.x,
                                label.y = label.y,
-                               label = p.label) +
+                               label = label) +
     ggplot2::theme_bw() +
     ggplot2::theme(
       legend.title = ggplot2::element_blank(),

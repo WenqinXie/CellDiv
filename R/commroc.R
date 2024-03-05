@@ -21,13 +21,14 @@
 ##' row.names(cdata) <- paste0("A",1:20)
 ##' colnames(cdata) <- c("B.cells.naive", "B.cells.memory", "Plasma.cells",
 ##' "T.cells.CD8", "T.cells.CD4.naive")
+##' cdata <- as.data.frame(cdata)
 ##' set.seed(1)
 ##' metadata <- data.frame(sample = row.names(cdata),
 ##' condition = sample(c("CR/PR", "SD/PD"), 20, replace = TRUE))
 ##' metadata$condition <- as.factor(metadata$condition)
 ##' cellsets <- c("B.cells.naive", "B.cells.memory", "Plasma.cells", "T.cells.CD8")
 ##' sami = 5
-##' commroc(cdata = cdata, metadata = metadata, cellsets = cellsets, sami = sami)
+##' commroc(cdata = cdata, metadata = metadata, cellsets = cellsets, sami = sami, ncores = 2)
 ##' @export
 ##' @author W Xie
 
