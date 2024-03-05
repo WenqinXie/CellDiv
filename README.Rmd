@@ -47,7 +47,7 @@ colnames(cdata2) <- c(paste0("CellType", 1:10))
 cdata2 <- as.data.frame(cdata2)
 
 cdata <- rbind(cdata1, cdata2)
-print(cdata)
+print(cdata[1:5, 1:5])
 ```
 
 ```{r}
@@ -56,21 +56,21 @@ set.seed(1)
 metadata <- data.frame(sample = row.names(cdata),
 condition = c(rep("SD/PD", 50), rep("CR/PR", 40)))
 metadata$condition <- as.factor(metadata$condition)
-print(metadata)
+print(head(metadata))
 ```
 
 Calculate diversity score for each sample
 ```{r}
 library(CellDiv)
 divscores <- celltdiv(cdata = cdata, cellsets = colnames(cdata)[1:8])
-print(divscores)
+print(head(divscores))
 ```
 
 Average AUC values are calculated after multiple samples for all combinations of cell types of interest
 ```{r}
 cdiv <- commroc(cdata = cdata, metadata = metadata, 
         cellsets = colnames(cdata)[1:8], sami = 500, ncores = 10)
-print(cdiv)
+print(head(cdiv))
 ```
 
 The combination of cell types corresponding to the maximum AUC value was selected
@@ -78,3 +78,30 @@ The combination of cell types corresponding to the maximum AUC value was selecte
 cellsets <- maxroc(acroc = cdiv)
 print(cellsets)
 ```
+Plot relative percentage of cell types
+```{r}
+#"SD/PD"
+plotProp(cdata = cdata1, 
+         slcells = strsplit(cellsets$cellsets, "; ")[[1]], 
+         xtitle = "No_Response",
+axistext.x = FALSE, bar_width = 0.5, flow = TRUE, geomtext = FALSE,
+color = c("#00468BFF", "#925E9FFF", "#AD002AFF", "#FDAF91FF", "#AFFF1F36", "#FDAF352F"))
+
+#"CR/PR"
+plotProp(cdata = cdata2, 
+         slcells = strsplit(cellsets$cellsets, "; ")[[1]], 
+         xtitle = "Response",
+axistext.x = FALSE, bar_width = 0.5, flow = TRUE, geomtext = FALSE,
+color = c("#00468BFF", "#925E9FFF", "#AD002AFF", "#FDAF91FF", "#AFFF1F36", "#FDAF352F"))
+```
+
+Plot the diversity score comparison between the two conditions
+```{r}
+data <- merge(divscores, metadata, by = "sample", sort = FALSE)
+plotCC(data = data, x = "condition", y = "divscore",
+xlabs = "Condition", ylabs = "DiversityScore",
+color = c("#00AED7", "#FD9347"),
+label.x = 1.5, label.y = 2.1,
+comparisons = NULL)
+```
+
