@@ -18,37 +18,63 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of CellDiv is to ...
+The goal of CellDiv is to calculate the Shannon Diversity Index for the cell types of interest to the user and to allow the identification of the combination of cell types that best distinguish dichotomous outcomes
 
 ## Installation
 
-You can install the development version of CellDiv like so:
+You can install the development version of CellDiv from [GitHub](https://github.com/) with:
 
 ``` r
-# FILL THIS IN! HOW CAN PEOPLE INSTALL YOUR DEV PACKAGE?
+# install.packages("devtools")
+devtools::install_github("WenqinXie/CellDiv")
 ```
 
-## Example
+## Usage
 
-This is a basic example which shows you how to solve a common problem:
+Generate sample data
+```{r}
+#cdata
+set.seed(1)
+cdata1 <- matrix(sample(1000:5000, 500, replace = TRUE), 50, 10)
+row.names(cdata1) <- paste0("A",1:50)
+colnames(cdata1) <- c(paste0("CellType", 1:10))
+cdata1 <- as.data.frame(cdata1)
 
-```{r example}
+set.seed(1)
+cdata2 <- matrix(sample(2000:4000, 400, replace = TRUE), 40, 10)
+row.names(cdata2) <- paste0("A",1:40)
+colnames(cdata2) <- c(paste0("CellType", 1:10))
+cdata2 <- as.data.frame(cdata2)
+
+cdata <- rbind(cdata1, cdata2)
+print(cdata)
+```
+
+```{r}
+#metadata c("CR/PR", "SD/PD")
+set.seed(1)
+metadata <- data.frame(sample = row.names(cdata),
+condition = c(rep("SD/PD", 50), rep("CR/PR", 40)))
+metadata$condition <- as.factor(metadata$condition)
+print(metadata)
+```
+
+Calculate diversity score for each sample
+```{r}
 library(CellDiv)
-## basic example code
+divscores <- celltdiv(cdata = cdata, cellsets = colnames(cdata)[1:8])
+print(divscores)
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
-
-```{r cars}
-summary(cars)
+Average AUC values are calculated after multiple samples for all combinations of cell types of interest
+```{r}
+cdiv <- commroc(cdata = cdata, metadata = metadata, 
+        cellsets = colnames(cdata)[1:8], sami = 500, ncores = 10)
+print(cdiv)
 ```
 
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. `devtools::build_readme()` is handy for this.
-
-You can also embed plots, for example:
-
-```{r pressure, echo = FALSE}
-plot(pressure)
+The combination of cell types corresponding to the maximum AUC value was selected
+```{r}
+cellsets <- maxroc(acroc = cdiv)
+print(cellsets)
 ```
-
-In that case, don't forget to commit and push the resulting figure files, so they display on GitHub and CRAN.
